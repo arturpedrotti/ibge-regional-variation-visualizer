@@ -1,32 +1,47 @@
 # Importamos as bibliotecas necessárias para a aplicação.
-import streamlit as st
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import numpy as np
+import streamlit as st 
+import pandas as pd  
+import seaborn as sns  
+import matplotlib.pyplot as plt  
+import numpy as np  
 
-
-# Leitura do arquivo CSV. Aqui, estamos removendo os números antes do ponto no início de cada linha usando uma função lambda.
+# Leitura do arquivo CSV. Aqui, estamos removendo os números antes do ponto no início de cada linha usando uma função lambda (também conhecida como a função anonima)
 df = pd.read_csv('Variacao.csv', delimiter=';', skiprows=1, skipfooter=1, decimal=',', encoding='utf8', converters={0: lambda x: x.split('.', 1)[-1]})
+# Lendo o arquivo CSV 'Variacao.csv' e armazenando os dados em um DataFrame chamado 'df'.
+# Definimos o delimitador como ';' e pulamos a primeira e a última linha do arquivo.
+# O parâmetro 'decimal' é usado para tratar números decimais com vírgula como separador decimal.
+# Usamos a função lambda no parâmetro 'converters' para remover os números antes do ponto na primeira coluna.
 
 # Convertendo os valores no dataframe para um formato numérico.
 df.iloc[:, 1:] = df.iloc[:, 1:].apply(pd.to_numeric, errors='coerce')
+# Aplicando a função pd.to_numeric a todas as colunas, exceto a primeira, para converter os valores para formato numérico.
+# O parâmetro 'errors' define que qualquer valor que não possa ser convertido será substituído por NaN. (not a number)
 
 # Configurando a primeira coluna como o índice do dataframe.
 df.set_index(df.columns[0], inplace=True)
+# Definindo a primeira coluna do DataFrame como o índice, para facilitar o acesso aos dados por meio de rótulos.
 
 # Transpondo o dataframe.
 df_t = df.transpose()
+# Transpondo o DataFrame, ou seja, trocando as linhas pelas colunas e vice-versa.
+# Isso é útil para facilitar a visualização e manipulação dos dados.
 
 # Criando uma caixa de seleção para o usuário escolher se quer visualizar todos os dados ou não.
 plot_all_data = st.checkbox('Mostrar todos os dados')
+# Criando uma caixa de seleção usando a biblioteca streamlit.
+# O valor selecionado (marcado ou desmarcado) será armazenado na variável 'plot_all_data'.
 
 # Definindo os tipos de gráficos que o usuário pode escolher.
 chart_types = ['Linha', 'Barra', 'Dispersão']
 chart_choice = st.selectbox("Selecione o tipo de gráfico:", options=chart_types)
+# Criando uma caixa de seleção usando a biblioteca streamlit.
+# O usuário poderá selecionar um tipo de gráfico entre as opções: 'Linha', 'Barra' e 'Dispersão'.
+# O valor escolhido será armazenado na variável 'chart_choice'.
 
 # Definindo uma lista de cores.
 colors = plt.cm.viridis(np.linspace(0, 1, len(df_t.columns)))
+# Gerando uma lista de cores usando a função 'viridis' da biblioteca matplotlib.
+# O número de cores geradas será igual ao número de colunas no DataFrame 'df_t'.
 
 # Caso a caixa 'Mostrar todos os dados' seja selecionada, esta condição será executada.
 if plot_all_data:
@@ -46,7 +61,7 @@ if plot_all_data:
     plt.xticks(rotation=90)
     plt.grid(True)
 
-    # Aqui ajustamos os limites do eixo y para variar de acordo com os valores mínimos e máximos dos dados.
+    # Ajustamos os limites do eixo y para variar de acordo com os valores mínimos e máximos dos dados.
     min_val = df_t.min().min()  # Obtemos o valor mínimo de todos os dados.
     max_val = df_t.max().max()  # Obtemos o valor máximo de todos os dados.
     plt.ylim(min_val, max_val)  # Definimos os limites do eixo y.
