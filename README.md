@@ -1,2 +1,2 @@
 # ibge-Graficos
-https://arturpedrotti-ibge-dados-ibge-dadosgrafico-cpyc3t.streamlit.app/
+https://arturpedrotti-ibge-graficos-grafico-0fv9dz.streamlit.app/
