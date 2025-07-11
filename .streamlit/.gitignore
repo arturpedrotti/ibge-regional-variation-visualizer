@@ -1,6 +1,10 @@
 # .gitignore
 __pycache__/
 *.pyc
-.DS_Store
+*.pyo
+*.pyd
+*.DS_Store
+.env
+.venv/
 venv/
 .streamlit/
